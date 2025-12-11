@@ -18,7 +18,7 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        Long userId = (Long) request.getSession().getAttribute("userId");
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
         if (userId == null) {
             response.sendRedirect("login");
             return;
@@ -43,7 +43,7 @@ public class CartServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        Long userId = (Long) request.getSession().getAttribute("userId");
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
         if (userId == null) {
             response.sendRedirect("login");
             return;
@@ -53,17 +53,17 @@ public class CartServlet extends HttpServlet {
         
         try {
             if ("add".equals(action)) {
-                Long medicineId = Long.parseLong(request.getParameter("medicineId"));
+                int medicineId = Integer.parseInt(request.getParameter("medicineId"));
                 int quantity = Integer.parseInt(request.getParameter("quantity"));
                 cartDAO.addItem(userId, medicineId, quantity);
                 response.sendRedirect("cart");
             } else if ("update".equals(action)) {
-                Long cartId = Long.parseLong(request.getParameter("cartId"));
+                int cartId = Integer.parseInt(request.getParameter("cartId"));
                 int quantity = Integer.parseInt(request.getParameter("quantity"));
                 cartDAO.updateQuantity(cartId, quantity);
                 response.sendRedirect("cart");
             } else if ("remove".equals(action)) {
-                Long cartId = Long.parseLong(request.getParameter("cartId"));
+                int cartId = Integer.parseInt(request.getParameter("cartId"));
                 cartDAO.removeItem(cartId);
                 response.sendRedirect("cart");
             }

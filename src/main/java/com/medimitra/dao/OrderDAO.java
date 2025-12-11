@@ -2,7 +2,7 @@ package com.medimitra.dao;
 
 import com.medimitra.model.Order;
 import com.medimitra.model.OrderItem;
-import com.medimitra.util.DatabaseUtil;
+import com.medimitra.util.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class OrderDAO {
     public Order create(Order order) throws SQLException {
         String sql = "INSERT INTO orders (user_id, order_number, total_amount, payment_method, payment_status, shipping_address_id, prescription_verified) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseUtil.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, order.getUserId());
             stmt.setString(2, order.getOrderNumber());
@@ -34,7 +34,7 @@ public class OrderDAO {
 
     public void addOrderItem(OrderItem item) throws SQLException {
         String sql = "INSERT INTO order_items (order_id, medicine_id, quantity, price, subtotal) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseUtil.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, item.getOrderId());
            // stmt.setLong(2, item.getMedicineId());
@@ -45,12 +45,12 @@ public class OrderDAO {
         }
     }
 
-    public List<Order> findByUserId(Long userId) throws SQLException {
+    public List<Order> findByUserId(int userId) throws SQLException {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC";
-        try (Connection conn = DatabaseUtil.getConnection();
+        String sql = "SELECT * FROM orders WHERE user_id = ? ORDER BY placed_at DESC";
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setLong(1, userId);
+            stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 orders.add(extractOrder(rs));
@@ -59,11 +59,11 @@ public class OrderDAO {
         return orders;
     }
 
-    public Order findById(Long id) throws SQLException {
-        String sql = "SELECT * FROM orders WHERE id = ?";
-        try (Connection conn = DatabaseUtil.getConnection();
+    public Order findById(int id) throws SQLException {
+        String sql = "SELECT * FROM orders WHERE order_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setLong(1, id);
+            stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return extractOrder(rs);
@@ -72,13 +72,13 @@ public class OrderDAO {
         return null;
     }
 
-    public List<OrderItem> findOrderItems(Long orderId) throws SQLException {
+    public List<OrderItem> findOrderItems(int orderId) throws SQLException {
         List<OrderItem> items = new ArrayList<>();
         String sql = "SELECT oi.*, m.name as medicine_name FROM order_items oi " +
-                    "JOIN medicines m ON oi.medicine_id = m.id WHERE oi.order_id = ?";
-        try (Connection conn = DatabaseUtil.getConnection();
+                    "JOIN medicines m ON oi.med_id = m.med_id WHERE oi.order_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setLong(1, orderId);
+            stmt.setInt(1, orderId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 OrderItem item = new OrderItem();
@@ -95,22 +95,22 @@ public class OrderDAO {
         return items;
     }
 
-    public void updateStatus(Long orderId, String status) throws SQLException {
-        String sql = "UPDATE orders SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
-        try (Connection conn = DatabaseUtil.getConnection();
+    public void updateStatus(int orderId, String status) throws SQLException {
+        String sql = "UPDATE orders SET order_status = ?, updated_at = CURRENT_TIMESTAMP WHERE order_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, status);
-            stmt.setLong(2, orderId);
+            stmt.setInt(2, orderId);
             stmt.executeUpdate();
         }
     }
 
-    public void updatePaymentStatus(Long orderId, String paymentStatus) throws SQLException {
-        String sql = "UPDATE orders SET payment_status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
-        try (Connection conn = DatabaseUtil.getConnection();
+    public void updatePaymentStatus(int orderId, String paymentStatus) throws SQLException {
+        String sql = "UPDATE orders SET payment_status = ?, updated_at = CURRENT_TIMESTAMP WHERE order_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, paymentStatus);
-            stmt.setLong(2, orderId);
+            stmt.setInt(2, orderId);
             stmt.executeUpdate();
         }
     }
@@ -139,3 +139,4 @@ public class OrderDAO {
         return order;
     }
 }
+

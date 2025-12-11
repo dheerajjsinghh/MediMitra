@@ -26,15 +26,14 @@ public class PasswordUtil {
         boolean hasUpper = false;
         boolean hasLower = false;
         boolean hasDigit = false;
-        boolean hasSpecial = false;
         
         for (char c : password.toCharArray()) {
             if (Character.isUpperCase(c)) hasUpper = true;
             else if (Character.isLowerCase(c)) hasLower = true;
             else if (Character.isDigit(c)) hasDigit = true;
-            else hasSpecial = true;
         }
         
+        // Password must have uppercase, lowercase, and digit
         return hasUpper && hasLower && hasDigit;
     }
 }

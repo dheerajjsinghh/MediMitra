@@ -1,5 +1,4 @@
 package com.medimitra.controller;
-https://xhamster.desi/videos/horny-devar-fucks-gorgeous-newly-married-indian-bhabhi-hindi-audio-xhtSBzr#
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -23,7 +22,7 @@ public class CheckoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        Long userId = (Long) request.getSession().getAttribute("userId");
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
         if (userId == null) {
             response.sendRedirect("login");
             return;
@@ -55,7 +54,7 @@ public class CheckoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        Long userId = (Long) request.getSession().getAttribute("userId");
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
         if (userId == null) {
             response.sendRedirect("login");
             return;
@@ -78,7 +77,7 @@ public class CheckoutServlet extends HttpServlet {
             String orderNumber = "ORD" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
             Order order = new Order(userId, orderNumber, totalAmount);
             order.setPaymentMethod(request.getParameter("paymentMethod"));
-            order.setShippingAddressId(Long.parseLong(request.getParameter("addressId")));
+            order.setShippingAddressId(Integer.parseInt(request.getParameter("addressId")));
             
             // Check if prescription required
             boolean requiresPrescription = cartItems.stream()

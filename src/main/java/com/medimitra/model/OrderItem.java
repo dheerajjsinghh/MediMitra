@@ -24,6 +24,16 @@ public class OrderItem {
         calculateTotalPrice();
     }
 
+    // Constructor for CheckoutServlet
+    public OrderItem(int orderId, int medId, int qty, BigDecimal unitPrice) {
+        this.orderId = orderId;
+        this.medId = medId;
+        this.qty = qty;
+        this.unitPrice = unitPrice;
+        this.gstRate = new BigDecimal("12.00"); // Default GST
+        calculateTotalPrice();
+    }
+
     public void calculateTotalPrice() {
         this.totalPrice = unitPrice.multiply(new BigDecimal(qty));
     }

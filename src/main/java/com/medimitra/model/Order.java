@@ -52,6 +52,13 @@ public class Order {
         this.orderStatus = OrderStatus.PLACED;
     }
 
+    public Order(int userId, String orderNumber, BigDecimal totalAmount) {
+        this();
+        this.userId = userId;
+        this.orderNumber = orderNumber;
+        this.finalAmount = totalAmount;
+    }
+
     // Getters and Setters
     public int getOrderId() {
         return orderId;
@@ -59,6 +66,11 @@ public class Order {
 
     public void setOrderId(int orderId) {
         this.orderId = orderId;
+    }
+
+    // Alias for getOrderId()
+    public int getId() {
+        return orderId;
     }
 
     public String getOrderNumber() {
@@ -267,5 +279,29 @@ public class Order {
 
     public void setCoupon(Coupon coupon) {
         this.coupon = coupon;
+    }
+
+    // Additional methods for CheckoutServlet
+    public void setShippingAddressId(int addressId) {
+        // Store address ID - you may want to add a field for this
+        this.shippingAddress = String.valueOf(addressId);
+    }
+
+    public void setPrescriptionVerified(boolean verified) {
+        // Store prescription verification status
+        if (verified) {
+            this.notes = (this.notes == null ? "" : this.notes) + "Prescription Verified;";
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId=" + orderId +
+                ", orderNumber='" + orderNumber + '\'' +
+                ", userId=" + userId +
+                ", finalAmount=" + finalAmount +
+                ", orderStatus=" + orderStatus +
+                '}';
     }
 }

@@ -18,7 +18,7 @@ public class OrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        Long userId = (Long) request.getSession().getAttribute("userId");
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
         if (userId == null) {
             response.sendRedirect("login");
             return;
@@ -43,17 +43,17 @@ class OrderDetailsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        Long userId = (Long) request.getSession().getAttribute("userId");
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
         if (userId == null) {
             response.sendRedirect("login");
             return;
         }
 
-        Long orderId = Long.parseLong(request.getParameter("id"));
+        int orderId = Integer.parseInt(request.getParameter("id"));
 
         try {
             Order order = orderDAO.findById(orderId);
-            if (order == null || !order.getUserId().equals(userId)) {
+            if (order == null || order.getUserId() != userId) {
                 response.sendRedirect("orders");
                 return;
             }

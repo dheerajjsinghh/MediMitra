@@ -1,8 +1,8 @@
 package com.medimitra.model;
 
 public class Address {
-    private Long id;
-    private Long userId;
+    private int id;
+    private int userId;
     private String addressLine1;
     private String addressLine2;
     private String city;
@@ -12,7 +12,7 @@ public class Address {
 
     public Address() {}
 
-    public Address(Long userId, String addressLine1, String city, String state, String postalCode) {
+    public Address(int userId, String addressLine1, String city, String state, String postalCode) {
         this.userId = userId;
         this.addressLine1 = addressLine1;
         this.city = city;
@@ -33,11 +33,11 @@ public class Address {
     }
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
 
     public String getAddressLine1() { return addressLine1; }
     public void setAddressLine1(String addressLine1) { this.addressLine1 = addressLine1; }

@@ -45,6 +45,21 @@ public class User {
         this.userId = userId;
     }
 
+    // Alias for getUserId() for consistency
+    public int getId() {
+        return userId;
+    }
+
+    // Alias for getName() to return username
+    public String getUsername() {
+        return name;
+    }
+
+    // Alias for setName()
+    public void setFullName(String fullName) {
+        this.name = fullName;
+    }
+
     public String getName() {
         return name;
     }
